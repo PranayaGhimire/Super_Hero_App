@@ -14,7 +14,7 @@ const App = () => {
   const accessToken='119dd9611f58c31aa538910792968271'
   const baseUrl=`https://superheroapi.com/api.php/${accessToken}`
   useEffect(()=>{
-      getSuperHeroById(Math.floor(Math.random()*731)+1);
+      getSuperHeroById(157);
   },[])
   
   const getSuperHeroById = async(id)=>{
