@@ -37,6 +37,7 @@ const App = () => {
   }
   
   const getSuperHeroByName = async(name)=>{
+  
     setIsLoading(true);
     const response=await fetch(`${baseUrl}/search/${name}`);
     const data=await response.json();
@@ -60,6 +61,7 @@ const App = () => {
       console.log(error);
       alert(data.error);
       setIsLoading(false);
+      setValue('');
     }
     
   }
@@ -71,6 +73,9 @@ const App = () => {
         <div className='space-x-3'>
           <input 
           onChange={(e)=>setValue(e.target.value)} value={value}
+          onKeyDown={(e)=>{
+            if(e.key==='Enter') getSuperHeroByName(value);
+            }}
           type="text" className='bg-zinc-700 p-2 rounded-lg outline-none' placeholder='Enter your SuperHero' />
           <button
           onClick={()=>getSuperHeroByName(value)}
@@ -81,7 +86,7 @@ const App = () => {
          onClick={()=>getSuperHeroById(Math.floor(Math.random()*731)+1)}
           className='bg-blue-600 p-2 rounded-lg hover:bg-blue-700 cursor-pointer'>Get Random SuperHero</button>
           {isLoading?(
-            <MoonLoader size='40px' color='white' speedMultiplier='1'/>
+            <MoonLoader size={40} color='white' speedMultiplier={1}/>
           ):(<div>
           <h1 className='text-2xl font-bold text-yellow-600 text-center mb-3'>{name}</h1>
           <img src={image} alt="Super Hero Image" className='w-60 h-60 rounded-md' />
