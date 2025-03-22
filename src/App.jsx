@@ -37,12 +37,14 @@ const App = () => {
   }
   
   const getSuperHeroByName = async(name)=>{
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
     const response=await fetch(`${baseUrl}/search/${name}`);
     const data=await response.json();
+    try {
+  
+    
     console.log(data);
-    alert(data.error);
+   
     // console.log(data.results[0]);
     const hero=data.results[0];
     setName(hero.name);
@@ -56,6 +58,8 @@ const App = () => {
     setIsLoading(false);
     } catch (error) {
       console.log(error);
+      alert(data.error);
+      setIsLoading(false);
     }
     
   }
