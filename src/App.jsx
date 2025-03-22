@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FadeLoader, MoonLoader } from 'react-spinners';
+import {  MoonLoader } from 'react-spinners';
 
 const App = () => {
   const [name,setName]=useState(null);
