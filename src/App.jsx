@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { FadeLoader, MoonLoader } from 'react-spinners';
 
 const App = () => {
   const [name,setName]=useState(null);
@@ -10,7 +11,10 @@ const App = () => {
   const [speed,setSpeed]=useState(0);
   const [strength,setStrength]=useState(0);
   
-  const [value,setValue]=useState('')
+  const [value,setValue]=useState('');
+
+  const [isLoading,setIsLoading]=useState(false);
+
   const accessToken='119dd9611f58c31aa538910792968271'
   const baseUrl=`https://superheroapi.com/api.php/${accessToken}`
   useEffect(()=>{
@@ -18,6 +22,7 @@ const App = () => {
   },[])
   
   const getSuperHeroById = async(id)=>{
+    setIsLoading(true);
     const response=await fetch(`${baseUrl}/${id}`);
     const data=await response.json();
     // console.log(data);
@@ -28,12 +33,16 @@ const App = () => {
     setPower(data.powerstats.power)
     setSpeed(data.powerstats.speed)
     setStrength(data.powerstats.strength)
+    setIsLoading(false);
   }
   
   const getSuperHeroByName = async(name)=>{
+    try {
+      setIsLoading(true);
     const response=await fetch(`${baseUrl}/search/${name}`);
     const data=await response.json();
     console.log(data);
+    alert(data.error);
     // console.log(data.results[0]);
     const hero=data.results[0];
     setName(hero.name);
@@ -44,6 +53,10 @@ const App = () => {
     setPower(hero.powerstats.power);
     setSpeed(hero.powerstats.speed);
     setStrength(hero.powerstats.strength);
+    setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
     
   }
 
@@ -63,15 +76,20 @@ const App = () => {
           <button 
          onClick={()=>getSuperHeroById(Math.floor(Math.random()*731)+1)}
           className='bg-blue-600 p-2 rounded-lg hover:bg-blue-700 cursor-pointer'>Get Random SuperHero</button>
-          <h1 className='text-2xl font-bold text-yellow-600'>{name}</h1>
+          {isLoading?(
+            <MoonLoader size='40px' color='white' speedMultiplier='1'/>
+          ):(<div>
+          <h1 className='text-2xl font-bold text-yellow-600 text-center mb-3'>{name}</h1>
           <img src={image} alt="Super Hero Image" className='w-60 h-60 rounded-md' />
-          <h1 className='text-xl font-bold text-yellow-600 underline'>Power Stats</h1>
+          <h1 className='text-xl font-bold text-yellow-600 underline mt-3 mb-2'>Power Stats</h1>
           <p className='text-green-500'>{`Combat: ${combat}`}</p>
           <p className='text-green-500'>{`Durability: ${durability?durability:null}`}</p>
           <p className='text-green-500'>{`Intelligence: ${intelligence}`}</p>
           <p className='text-green-500'>{`Power: ${power}`}</p>
           <p className='text-green-500'>{`Speed: ${speed}`}</p>
           <p className='text-green-500'>{`Strength: ${strength}`}</p>
+          </div>)}
+          
       </div>
     </div>
   )
